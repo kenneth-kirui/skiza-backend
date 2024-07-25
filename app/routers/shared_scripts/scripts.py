@@ -8,8 +8,8 @@ from fastapi.security import OAuth2PasswordBearer
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
 
-SECRET_KEY = settings.secret_key #"d963346e21281c663b756f17a767b8e64d2664b70c6e4dc5d0d9e9dd7f14f69c"
-ALGORITHM = settings.algorithm #"HS256"
+SECRET_KEY = settings.SECRET_KEY #"d963346e21281c663b756f17a767b8e64d2664b70c6e4dc5d0d9e9dd7f14f69c"
+ALGORITHM = settings.ALGORITHM #"HS256"
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

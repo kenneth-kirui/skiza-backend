@@ -39,6 +39,8 @@ class Tune(Base):
   code = Column(Integer,index=True)
   user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
   file_name = Column(String)
+  created_at = Column(DateTime, default=datetime.datetime.utcnow, nullable=False)
+  updated_at = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow, nullable=False)
 
   users = relationship("User", back_populates="tunes")
 

@@ -6,8 +6,8 @@ from ..dependencies.dependencies import get_db
 from ..routers.shared_scripts.scripts import  create_access_token, verify_password
 from ..core.config import settings
 
-ALGORITHIM = settings.algorithm
-SECRET_KEY = settings.secret_key
+ALGORITHIM = settings.ALGORITHM
+SECRET_KEY = settings.SECRET_KEY
 router = APIRouter()
 
 router = APIRouter(

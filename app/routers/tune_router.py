@@ -13,7 +13,7 @@ router = APIRouter(
     tags=['Tunes'],
     prefix="/tunes"
 )
-default_url = settings.default_url
+default_url = settings.DEFAULT_URL
 uploads_dir =  default_url + "uploads"
 
 

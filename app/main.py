@@ -1,11 +1,14 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from routers import tune_router, user_router, user_auth_router
+from .database.database import Base, engine
+from .routers import tune_router, user_router, user_auth_router
 from fastapi.middleware.cors import CORSMiddleware
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+app.mount("/uploads", StaticFiles(directory="app/uploads"), name="uploads")
 
 app.add_middleware(
     CORSMiddleware,

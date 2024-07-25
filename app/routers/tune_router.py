@@ -3,10 +3,11 @@ import os
 from typing import Optional
 from fastapi import APIRouter, Depends, File, HTTPException, status, Form, UploadFile
 from sqlalchemy.orm import Session
-from config.settings import settings
-from database import  crud
-from dependencies import dependencies
-from pydantics.tune import TuneCreate, Tune, TuneUpdate
+# from core.config import settings
+from ..core.config import settings
+from ..database import  crud
+from ..dependencies import dependencies
+from ..pydantics.tune import TuneCreate, Tune, TuneUpdate
 
 router = APIRouter(
     tags=['Tunes'],

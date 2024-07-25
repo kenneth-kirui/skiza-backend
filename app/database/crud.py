@@ -2,8 +2,8 @@ from typing import Optional
 from fastapi import HTTPException,status
 from sqlalchemy.orm import Session
 from . import models
-from pydantics.user import UserCreate, UserUpdate 
-from pydantics.tune import TuneCreate, TuneUpdate
+from ..pydantics.user import UserCreate, UserUpdate 
+from ..pydantics.tune import TuneCreate, TuneUpdate
 
 #user operations
 def create_user(db:Session, user: UserCreate):

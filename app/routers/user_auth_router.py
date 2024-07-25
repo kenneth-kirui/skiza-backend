@@ -1,10 +1,10 @@
-from database import crud
-from pydantics import user
-from dependencies.dependencies import get_db
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from routers.shared_scripts.scripts import  create_access_token, verify_password
-from config.settings import settings
+from ..database import crud
+from ..pydantics import user
+from ..dependencies.dependencies import get_db
+from ..routers.shared_scripts.scripts import  create_access_token, verify_password
+from ..core.config import settings
 
 ALGORITHIM = settings.algorithm
 SECRET_KEY = settings.secret_key

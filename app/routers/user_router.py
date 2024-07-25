@@ -2,9 +2,9 @@ from typing import Optional
 from fastapi import APIRouter, Depends,status, HTTPException
 from fastapi.params import Body
 from sqlalchemy.orm import Session
-from database import  crud
-from dependencies import dependencies
-from pydantics import user
+from ..database import  crud
+from ..dependencies import dependencies
+from ..pydantics import user
 from .shared_scripts.scripts import get_password_hash, get_current_user
 
 router = APIRouter(

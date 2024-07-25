@@ -1,9 +1,8 @@
 import datetime
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Boolean
 from sqlalchemy.orm import relationship
-from sqlalchemy import event
 
-from .database import Base, engine
+from .database import Base
 
 class User(Base):
   __tablename__ = "users"
@@ -43,8 +42,6 @@ class Tune(Base):
 
   users = relationship("User", back_populates="tunes")
 
-
-Base.metadata.create_all(bind=engine)
 
 
                 

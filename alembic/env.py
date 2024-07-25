@@ -6,7 +6,7 @@ from alembic import context
 
 from app.database.models import Base
 from app.core.config import settings
-print(settings.database_hostname)
+
 
 
 # this is the Alembic Config object, which provides

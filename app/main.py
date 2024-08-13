@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
 
+
 app = FastAPI()
 
 app.mount("/uploads", StaticFiles(directory="app/uploads"), name="uploads")

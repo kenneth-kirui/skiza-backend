@@ -1,9 +1,8 @@
 from datetime import datetime
 import os
 from typing import Optional
-from fastapi import APIRouter, Depends, File, HTTPException, status, Form, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, Request, status, Form, UploadFile
 from sqlalchemy.orm import Session
-# from core.config import settings
 from ..core.config import settings
 from ..database import  crud
 from ..dependencies import dependencies
@@ -13,51 +12,36 @@ router = APIRouter(
     tags=['Tunes'],
     prefix="/tunes"
 )
-default_url = settings.DEFAULT_URL
-uploads_dir =  default_url + "uploads"
+
+IMAGE_DIR = "app/uploads/"
 
 
 @router.post("/", response_model=Tune)
 async def create_tune(
+    request: Request,
     name: str = Form(...),
     code: int = Form(...),
     file: UploadFile = File(...),
     user_id: int = Form(...),
     db: Session = Depends(dependencies.get_db)
 ):
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    file_extension = os.path.splitext(file.filename)[1]
+    base_url = str(request.base_url)  
     cleaned_name = name.replace(" ", "")
-    formatted_name = f"{cleaned_name}_{timestamp}{file_extension}"
     contents = await file.read()
-    tune_data = TuneCreate(name=name, code=code, user_id=user_id, file_name=formatted_name)
+    image_url = f"{base_url}uploads/{cleaned_name}"
+    tune_data = TuneCreate(name=name, code=code, user_id=user_id, file_name=image_url)
     db_tune = crud.create_tune(db=db, tune=tune_data)
-    file_path = f"uploads/{formatted_name}"
+    file_path = f"app/uploads/{cleaned_name}"
+    file_path = os.path.join(IMAGE_DIR, cleaned_name)
     with open(file_path, "wb") as f:
         f.write(contents)
     return db_tune
 
 @router.get("/")
 async def read_tunes(skip: int = 0, limit: int = 100, searchText:Optional[str]='', db: Session = Depends(dependencies.get_db)):
-    tunes_indb = crud.get_tunes(db, skip=skip, limit=limit, search=searchText)
-    if not tunes_indb:
+    tunes = crud.get_tunes(db, skip=skip, limit=limit, search=searchText)
+    if not tunes:
         raise HTTPException(status_code=404, detail="No SKiza tunes found")
-    tunes = []
-    for tune in tunes_indb:
-        file_name = tune.file_name
-        if file_name:
-            file_path = os.path.join(uploads_dir, tune.file_name)
-            print(file_path)
-            file_info = {
-                "id":tune.id,
-                "name":tune.name,
-                "code":tune.code,
-                "file_path":file_path,
-                "fileName":file_name
-            }
-            tunes.append(file_info) 
-        else:
-            print("Skipping tune with no file_name")
     return tunes
 
 @router.delete("/{tune_id}")
@@ -69,23 +53,25 @@ def delete_tune(tune_id: int,  db: Session = Depends(dependencies.get_db)):
 
 @router.put("/{tune_id}", response_model=Tune)
 async def edit_tune(
+    request: Request,
     tune_id: int,
     name: str = Form(...),
     code: int = Form(...),
     file: UploadFile = File(...),
     db: Session = Depends(dependencies.get_db)
 ):
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    file_extension = os.path.splitext(file.filename)[1]
+    base_url = str(request.base_url)  
     cleaned_name = name.replace(" ", "")
-    formatted_name = f"{cleaned_name}_{timestamp}{file_extension}"
+    cleaned_name = name.replace(" ", "")
+    image_url = f"{base_url}uploads/{cleaned_name}"
     contents = await file.read()
-    file_path = f"uploads/{formatted_name}"
+    file_path = os.path.join(IMAGE_DIR, cleaned_name)
 
     with open(file_path, "wb") as f:
         f.write(contents)
 
-    tune_data = TuneUpdate(name=name, code=code, file_name=formatted_name)
+    tune_data = TuneUpdate(name=name, code=code, file_name=image_url)
+    print(tune_data)
     updated_tune = crud.update_tune(db=db, id=tune_id, tune=tune_data)
 
     if not updated_tune:

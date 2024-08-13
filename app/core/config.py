@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     DATABASE_NAME:str
     SECRET_KEY: str 
     ALGORITHM: str
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    ACCESS_TOKEN_EXPIRE_MINUTES: int 
 
     class Config:
         env_file = ".env"   

@@ -17,7 +17,7 @@ def create_user(payload:dict = Body(...), db: Session = Depends(dependencies.get
     user_data = user.UserCreate(
         firstname=payload.get('firstname'),
         lastname=payload.get('lastname').lower(),
-        email=payload.get('email'),
+        email=payload.get('email').lower(),
         password=get_password_hash(payload.get('password')),
         role_id=payload.get('role_id')
     )
@@ -30,7 +30,7 @@ def create_user(payload:dict = Body(...), db: Session = Depends(dependencies.get
     return db_user
 
 @router.get("/", response_model=list[user.UserInDB])
-def read_users(skip: int = 0, limit: int = 0,searchText:Optional[str]='', db: Session = Depends(dependencies.get_db)):
+def read_users(skip: int = 0, limit: int = 10,searchText:Optional[str]='', db: Session = Depends(dependencies.get_db)):
     users = crud.get_users(db, skip=skip, limit=limit, search =searchText)
     if not users:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={"message":"No users found"})

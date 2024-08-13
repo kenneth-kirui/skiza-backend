@@ -16,7 +16,7 @@ router = APIRouter(
 
 @router.post("/login")
 async def login(user_credentials:user.UserLogin, db:Session = Depends(get_db) ):
-  user = crud.get_user_by_email(db,user_credentials.email)
+  user = crud.get_user_by_email(db,user_credentials.email.lower())
   if not user:
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail = f"Invalid credentials")
   if not verify_password(user_credentials.password, user.password):

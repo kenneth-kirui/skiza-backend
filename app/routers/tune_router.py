@@ -26,13 +26,13 @@ async def create_tune(
     db: Session = Depends(dependencies.get_db)
 ):
     base_url = str(request.base_url)  
-    cleaned_name = name.replace(" ", "")
+    
     contents = await file.read()
-    image_url = f"{base_url}uploads/{cleaned_name}"
+    image_url = f"{base_url}uploads/{file.filename}"
     tune_data = TuneCreate(name=name, code=code, user_id=user_id, file_name=image_url)
     db_tune = crud.create_tune(db=db, tune=tune_data)
-    file_path = f"app/uploads/{cleaned_name}"
-    file_path = os.path.join(IMAGE_DIR, cleaned_name)
+    file_path = f"app/uploads/{file.filename}"
+    file_path = os.path.join(IMAGE_DIR,file.filename)
     with open(file_path, "wb") as f:
         f.write(contents)
     return db_tune

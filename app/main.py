@@ -18,6 +18,10 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
+@app.get("/")
+async def root():
+    return {"message": "Welcome to crossgate skiza tune app!"}
+
 app.include_router(user_auth_router.router)
 app.include_router(user_router.router)
 app.include_router(tune_router.router)

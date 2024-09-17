@@ -44,14 +44,15 @@ def read_user(user_id: int, db: Session = Depends(dependencies.get_db)):
     return db_user
 
 @router.put("/{user_id}", response_model=user.UserUpdate)
-def update_user(user_id: int, user_update: user.UserUpdate, db: Session = Depends(dependencies.get_db), user_data = Depends(get_current_user)):
+def update_user(user_id: int, user_update: user.UserUpdate, 
+                db: Session = Depends(dependencies.get_db), 
+                user_data = Depends(get_current_user)):
     db_user = crud.get_user(db, user_id=user_id)
     if db_user is None:
         raise  HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={"message":"User not found!"})
     if user_update.password:
         hashed_password = get_password_hash(user_update.password)
         user_update.password = hashed_password
-
     updated_user = crud.update_user(db, user_id=user_id, user_update=user_update)
     return updated_user
 

@@ -52,13 +52,14 @@ def create_tune(db:Session, tune: TuneCreate):
     db.commit()
     db.refresh(db_tune)
     return db_tune
+    
 
 #get all tunes
 def get_tunes(db:Session, skip: int = 0, limit: int = 100, search:Optional[str]= ''):
      return db.query(models.Tune).filter(models.Tune.name.contains(search)).offset(skip).limit(limit).all()
 
-def get_tune(db:Session, tune_id:int):
-    return db.query(models.Tune).filter(models.Tune.id==tune_id)
+def get_tune(db:Session, code:int):
+    return db.query(models.Tune).filter(models.Tune.code==code).first()
 
 # Delete tune
 def delete_tune(db:Session, tune_id:int):
@@ -73,7 +74,6 @@ def update_tune(db: Session, id: int, tune:TuneUpdate) -> models.Tune:
     tune_in_db = tune_query.first()
     if tune_in_db is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={"message": "Tune not found"})
-    
     tune_query.update(tune.dict(), synchronize_session=False)
     db.commit()
     
@@ -81,6 +81,8 @@ def update_tune(db: Session, id: int, tune:TuneUpdate) -> models.Tune:
     db.refresh(updated_tune)
     
     return updated_tune
+
+
 
 
     

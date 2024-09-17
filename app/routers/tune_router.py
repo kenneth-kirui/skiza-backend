@@ -26,9 +26,11 @@ async def create_tune(
     db: Session = Depends(dependencies.get_db)
 ):
     base_url = str(request.base_url)  
-    
     contents = await file.read()
     image_url = f"{base_url}uploads/{file.filename}"
+    tune_in_db=crud.get_tune(db=db, code=code)
+    if tune_in_db:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Tune already exist!")
     tune_data = TuneCreate(name=name, code=code, user_id=user_id, file_name=image_url)
     db_tune = crud.create_tune(db=db, tune=tune_data)
     file_path = f"app/uploads/{file.filename}"
@@ -38,10 +40,11 @@ async def create_tune(
     return db_tune
 
 @router.get("/")
-async def read_tunes(skip: int = 0, limit: int = 100, searchText:Optional[str]='', db: Session = Depends(dependencies.get_db)):
+async def read_tunes(skip: int = 0, limit: int = 100, searchText:Optional[str]='', 
+                     db: Session = Depends(dependencies.get_db)):
     tunes = crud.get_tunes(db, skip=skip, limit=limit, search=searchText)
     if not tunes:
-        raise HTTPException(status_code=404, detail="No SKiza tunes found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No SKiza tunes found")
     return tunes
 
 @router.delete("/{tune_id}")

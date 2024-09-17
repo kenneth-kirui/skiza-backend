@@ -1,6 +1,5 @@
 from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
-    DEFAULT_URL:str
     DATABASE_HOSTNAME:str
     DATABASE_PORT:str 
     DATABASE_PASSWORD:str

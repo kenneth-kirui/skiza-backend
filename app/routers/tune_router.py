@@ -33,7 +33,7 @@ async def create_tune(
     if tune_in_db:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Tune with code {code} already exist!")
     
-    tune_data =TuneCreate(name=name, code=code, user_id=user_id, file_name=file.filename)
+    tune_data =TuneCreate(name=name, code=code, user_id=user_id, file_name=file.filename.strip().replace(" ", "_"))
     db_tune = crud.create_tune(db=db, tune=tune_data)
     
     with open(file_path, "wb") as f:

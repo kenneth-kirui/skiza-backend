@@ -61,6 +61,10 @@ def get_tunes(db:Session, skip: int = 0, limit: int = 100, search:Optional[str]=
 def get_tune(db:Session, code:int):
     return db.query(models.Tune).filter(models.Tune.code==code).first()
 
+#get tune by id
+def get_tune_by_id(db:Session, tune_id:int):
+    return db.query(models.Tune).filter(models.Tune.id==tune_id).first()
+
 # Delete tune
 def delete_tune(db:Session, tune_id:int):
     db_tune = db.query(models.Tune).filter(models.Tune.id == tune_id).first()

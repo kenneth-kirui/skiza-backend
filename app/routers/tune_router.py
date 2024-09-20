@@ -26,7 +26,7 @@ async def create_tune(
     db: Session = Depends(dependencies.get_db)
 ): 
     contents = await file.read()
-    file_path = os.path.join(UPLOAD_DIR, file.filename)
+    file_path = os.path.join(UPLOAD_DIR, file.filename.strip().replace(" ", "_"))
     if os.path.exists(file_path):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"File with the name {file.filename} exits")
     tune_in_db = crud.get_tune(db=db, code=code)

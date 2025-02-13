@@ -7,7 +7,15 @@ class Settings(BaseSettings):
     DATABASE_NAME:str
     SECRET_KEY: str 
     ALGORITHM: str
-    ACCESS_TOKEN_EXPIRE_MINUTES: int 
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
+    SMS_PROFILE_CODE:str
+    SMSAPIKEY:str
+    SMSURL:str
+    SAFARICOMAUTHORIZATION:str
+    USERNAME:str
+    PASSWORD:str
+    SAFARICOMSESSIONIDURL:str
+
 
     class Config:
         env_file = ".env"   

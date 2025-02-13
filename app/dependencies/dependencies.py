@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from passlib.context import CryptContext
-from ..database.database import SessionLocal
-from ..pydantics.user import UserInDB
+from database.database import SessionLocal
+from pydantics.user import UserInDB
 
 def get_db():
     db = SessionLocal()
